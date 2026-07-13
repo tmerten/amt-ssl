@@ -11,7 +11,7 @@ set -euo pipefail
 
 CA_DIR="${CA_DIR:-$HOME/amt-ca}"
 CA_CN="${CA_CN:-AMT Root CA}"
-CA_O="${CA_O:-TM}"
+CA_O="${CA_O:-ACME}"
 CA_C="${CA_C:-DE}"
 CA_DAYS="${CA_DAYS:-3650}"
 CA_BITS="${CA_BITS:-2048}"
