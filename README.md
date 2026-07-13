@@ -135,8 +135,14 @@ macOS: import into Keychain Access → System → **Always Trust**.
 included, so afterwards the leaf validates from the default trust store:
 
 ```bash
-$ openssl verify ~/amt-ca/devices/amt-machine1.lan/amt-machine1.lan.crt
-amt-machine1.lan.crt: OK
+# verifies YOUR chain (works regardless of trust store or which openssl)
+openssl verify -CAfile ~/amt-ca/ca/amt-root-ca.crt ~/amt-ca/devices/dell1.lan/dell1.lan.crt
+
+# verifies the SYSTEM store is set up (use the system openssl explicitly)
+/usr/bin/openssl verify ~/amt-ca/devices/dell1.lan/dell1.lan.crt
+
+# verify any other openssl binary (e.g. via homebrew)
+SSL_CERT_DIR=/etc/ssl/certs openssl verify ~/amt-ca/devices/dell1.lan/dell1.lan.crt
 ```
 
 Add the FQDNs to DNS or `/etc/hosts` and connect **by name**, not IP.
