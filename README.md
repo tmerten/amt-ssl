@@ -159,7 +159,7 @@ wsman identify --hostname amt-machine1.lan --port 16993 \
 ```
 
 `--cacert` is what selects the https scheme in `wsmancli` — see
-[MAAS-BUG-2146166.md](MAAS-BUG-2146166.md). Do **not** use `--endpoint`.
+[maas-bug-2146166.md](maas-bug-2146166.md). Do **not** use `--endpoint`.
 
 Power query (this is exactly what MAAS runs):
 
