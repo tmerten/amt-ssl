@@ -1,21 +1,22 @@
 # Intel AMT over HTTPS, from Linux/macOS
 
-Tooling to get a **real, browser-valid TLS certificate** onto Intel AMT machines and
-enable HTTPS on port 16993 — without Windows, and without Intel SCS.
+Tooling to get a **browser-valid TLS certificate** onto Intel AMT machines and
+enable HTTPS on port 16993.
 
 Developed against **Dell OptiPlex 7070, Intel ME 12.0.96, Admin Control Mode (ACM)**.
-Should apply to AMT 11–12 generally.
+Should work with AMT 11–12 generally.
 
 ## Why this exists
 
-The obvious path — MeshCommander's *Security Settings → Issue Certificate* — produces a
-certificate that **cannot carry a `subjectAltName`**. Chrome and Firefox dropped CN
+MeshCommander's *Security Settings → Issue Certificate* — produces a
+certificate that **does not carry a `subjectAltName`**. Chrome and Firefox dropped CN
 fallback years ago, so those certs are rejected with `ERR_CERT_COMMON_NAME_INVALID` no
-matter how thoroughly you trust the root. See [Gotchas](#gotchas) for the source
+matter if you trust the root. See [Gotchas](#gotchas) for the source
 evidence.
 
 These scripts build a proper CA, issue SAN certs, install them into AMT firmware over
-WS-Management, and turn on TLS.
+WS-Management, and turn on TLS. They will by default not turn off plain HTTP so that
+you have a fallback.
 
 ---
 
@@ -45,9 +46,9 @@ WS-Management, and turn on TLS.
 ./amt-ca-init.sh
 ```
 
-Creates `~/amt-ca/ca/amt-root-ca.{key,crt}`. Keep the key safe — it signs every device.
+Creates `~/amt-ca/ca/amt-root-ca.{key,crt}`. Keep the key safe it is used to sign every device.
 
-Override with env vars if you like:
+You can override with env vars if you like:
 
 ```bash
 CA_DIR=/secure/amt-ca CA_CN="ACME AMT Root CA" ./amt-ca-init.sh
@@ -64,7 +65,7 @@ EOF
 
 ./amt-devices.sh issue -f hosts.txt
 ```
-Note: I assume your IP is the one above, change accordingly when following the README.
+Note: This assumes the IPs above, change accordingly when following the README.
 
 Each device gets `.key`, `.crt` and `.p12` under `~/amt-ca/devices/<fqdn>/`.
 
